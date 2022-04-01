@@ -1,4 +1,5 @@
 const canvas = document.getElementById('jsCanvas');
+const colors = document.getElementsByClassName('controls__color')
 const ctx = canvas.getContext('2d');
 
 canvas.width = 500;
@@ -40,6 +41,11 @@ const onMouseUp = () => {
     onMouseLeave()
 }
 
+const handleColorClick = (e) => {
+    const color = e.target.style.backgroundColor;
+    ctx.strokeStyle = color;
+}
+
 if(canvas){
     canvas.addEventListener('mousemove', onMouseMove)
     canvas.addEventListener('mousedown', onMouseDown)
@@ -48,3 +54,9 @@ if(canvas){
     // 그래야 다시 캔버스 화면으로 돌아왔을때 클릭하지 않아도 그려지는 현상을 막을 수 있다.
     canvas.addEventListener('mouseleave', onMouseLeave)
 }
+
+Array.from(colors).forEach(color => 
+    color.addEventListener('click', handleColorClick)
+)
+// const colorList = color.map(color => color);
+// console.log(colorList)
