@@ -2,6 +2,7 @@ const canvas = document.getElementById('jsCanvas');
 const colors = document.getElementsByClassName('controls__color');
 const range = document.getElementById('jsRange');
 const mode = document.getElementById('jsMode');
+const saveBtn = document.getElementById('jsSave')
 const ctx = canvas.getContext('2d');
 
 const INITIAL_COLOR = '#2c2c2c' // 초기 페인트 색상
@@ -11,6 +12,8 @@ const CANVAS_SIZE = 500;
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
+ctx.fillStyle = 'white';
+ctx.fillRect(0 ,0, canvas.width, canvas.height);
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;    //초기 페인트 굵기
@@ -78,6 +81,25 @@ const handleCanvasClick = () => {
     }
 }
 
+const handleCM = (e) => {
+    // 브라우저의 기본동작을 막는다.
+    // 마우스 우클릭도 막는다. 즉, 우클릭으로 이미지를 다운받게 하고 싶지 않다.
+    // 오직 save 버튼으로만 다운받게 하고 싶기에 활용
+    e.preventDefault();
+}
+
+const handleSaveClick = () => {
+    // 첫번째로는 이미지를 선택할 수 있어야 한다.
+    const image = canvas.toDataURL('image/jpeg');
+    // 두번째로 이미지를 다운로드할 수 있는 태그가 필요하다.
+    const link = document.createElement('a')
+    // 세번째로 이미지는 url로 되어있으니 하이퍼택스트를 넘길 수 있어야 한다.
+    link.href = image;
+    // 이미지의 저장 이름 설정
+    link.download = 'PaintJS[🖌️]';
+    link.click();
+}
+
 
 if(canvas){
     canvas.addEventListener('mousemove', onMouseMove)
@@ -87,6 +109,7 @@ if(canvas){
     // 그래야 다시 캔버스 화면으로 돌아왔을때 클릭하지 않아도 그려지는 현상을 막을 수 있다.
     canvas.addEventListener('mouseleave', onMouseLeave)
     canvas.addEventListener('click', handleCanvasClick)
+    canvas.addEventListener('contextmenu', handleCM)
 }
 
 // color의 경우 배열이기에 배열 메소드를 쓰면 확인이 가능해서 인듯하다.
@@ -102,4 +125,8 @@ if(range){
 
 if(mode){
     mode.addEventListener('click', handleModeClick)
+}
+
+if(saveBtn){
+    saveBtn.addEventListener('click', handleSaveClick)
 }
